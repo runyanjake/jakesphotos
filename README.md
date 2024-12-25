@@ -10,6 +10,7 @@ npx create-react-app portfolio
 ```
 npm install web-vitals
 npm install react-router-dom
+npm install masonry-layout
 ```
 3. Test changes/fixes with
 ```
