@@ -1,0 +1,8 @@
+.footer {
+    background-color: #333;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0; /* Stick to the bottom */
+    width: 100%;
+}

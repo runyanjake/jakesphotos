@@ -1,18 +1,18 @@
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
-    margin: 0 auto; /* Adjust for spacing */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    margin: 0 auto;
 }
 
 .gallery-photo {
-    margin: 4px; /* Vertical padding between items */
-    margin-left: 4px; /* Horizontal padding between items */
-    margin-right: 4px; /* Horizontal padding between items */
-    border-radius: 8px; /* Optional: Add rounded corners */
-    display: block; /* Ensure images are block elements */
-    height: auto; /* Maintain aspect ratio */
-    max-width: 30vw;
-    object-fit: cover; /* Ensure images cover the area without distortion */
+    margin: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+    border-radius: 8px;
+    display: block;
+    height: auto;
+    max-width: 30vw; /* Do not mix with max-height! */
+    object-fit: cover;
 }
 
 /* Responsive adjustments */
