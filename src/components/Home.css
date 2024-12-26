@@ -5,13 +5,11 @@
 }
 
 .gallery-photo {
-    margin: 4px;
-    margin-left: 4px;
-    margin-right: 4px;
-    border-radius: 8px;
+    margin: 0.6vw;
+    border-radius: 5px;
     display: block;
     height: auto;
-    max-width: 30vw; /* Do not mix with max-height! */
+    max-width: 31vw; /* Do not mix with max-height! */
     object-fit: cover;
 }
 

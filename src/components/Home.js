@@ -1,53 +1,40 @@
 import React, { useEffect, useRef } from 'react';
 import Masonry from 'masonry-layout';
-import './Home.css'; // Global styles
+import images from '../data/Images'; // Import the image URLs
+import './Home.css'; // Ensure you have your CSS for styling
 
 const Home = () => {
     const masonryRef = useRef(null);
 
-    // Use require.context to load all images from the static/photos directory
-    const importAll = (r) => {
-        let images = {};
-        r.keys().forEach((item) => { images[item.replace('./', '')] = r(item); });
-        return images;
-    };
-
-    const images = importAll(require.context('../../static/photos', false, /\.(png|jpe?g|svg)$/));
-
     useEffect(() => {
-        // Initialize Masonry after images have loaded
         const masonry = new Masonry(masonryRef.current, {
             itemSelector: '.gallery-photo',
             columnWidth: '.gallery-photo',
-            percentPosition: true,
-            horizontalOrder: true,
+            percentPosition: true
         });
 
-        // Layout Masonry after all images have loaded
-        const imgLoad = images => {
-            const imgLoad = images.map(img => {
-                return new Promise((resolve) => {
-                    const imgElement = new Image();
-                    imgElement.src = img;
-                    imgElement.onload = resolve;
-                });
-            });
-            return Promise.all(imgLoad);
+        // Layout Masonry after images have loaded
+        const imagesLoaded = () => {
+            masonry.layout();
         };
 
-        imgLoad(Object.values(images)).then(() => {
-            masonry.layout();
+        // Add event listener for image load
+        const imgElements = masonryRef.current.querySelectorAll('img');
+        imgElements.forEach(img => {
+            img.addEventListener('load', imagesLoaded);
         });
 
         return () => {
-            masonry.destroy(); // Cleanup on unmount
+            imgElements.forEach(img => {
+                img.removeEventListener('load', imagesLoaded);
+            });
         };
-    }, [images]);
+    }, []);
 
     return (
         <div className="gallery" ref={masonryRef}>
-            {Object.keys(images).map((key, index) => (
-                <img key={index} src={images[key]} alt={`Jake Runyan ${index + 1}`} className="gallery-photo" />
+            {images.map((image, index) => (
+                <img key={index} src={image} alt={`Jake Runyan ${index + 1}`} className="gallery-photo" />
             ))}
         </div>
     );

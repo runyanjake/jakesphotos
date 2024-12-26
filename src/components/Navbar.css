@@ -1,0 +1,34 @@
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Space between logo, title, and icons */
+    align-items: center; /* Center items vertically */
+    background-color: #333; /* Background color of the navbar */
+    padding: 10px 20px; /* Padding for the navbar */
+}
+
+.navbar-logo .logo {
+    height: 50px; /* Set a height for the logo */
+    border-radius: 10px; /* Rounded corners for the logo */
+}
+
+.navbar-title h1 {
+    color: white; /* Text color */
+    font-family: 'Arial', sans-serif; /* Specify your desired font */
+    font-size: 24px; /* Font size for the title */
+    margin: 0; /* Remove default margin */
+}
+
+.navbar-icons {
+    display: flex; /* Use flexbox for icons */
+    gap: 15px; /* Space between icons */
+}
+
+.navbar-icons .icon {
+    height: 30px; /* Set a height for the icons */
+    width: 30px; /* Set a width for the icons */
+    transition: transform 0.2s; /* Smooth transition for hover effect */
+}
+
+.navbar-icons .icon:hover {
+    transform: scale(1.1); /* Scale up the icon on hover */
+}
