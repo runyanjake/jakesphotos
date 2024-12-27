@@ -21,7 +21,7 @@ const Navbar = () => {
             </div>
             <div className="navbar-icons">
                 <a href="https://github.com/runyanjake/jakesphotos" target="_blank" rel="noopener noreferrer">
-                    <img src={githubIcon} alt="GitHub" className="icon" />
+                    <img src={githubIcon} alt="GitHub" className="icon" title="This Website's Source Code!"/>
                 </a>
             </div>
         </nav>
