@@ -6,3 +6,7 @@
     bottom: 0; /* Stick to the bottom */
     width: 100%;
 }
+
+.footer p {
+    color: #d4d1c6;
+}

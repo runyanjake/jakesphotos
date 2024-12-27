@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     margin: 0 auto;
+    background-color: #333;
 }
 
 .gallery-photo {
@@ -9,7 +10,7 @@
     border-radius: 5px;
     display: block;
     height: auto;
-    max-width: 31vw; /* Do not mix with max-height! */
+    max-width: 32vw; /* Do not mix with max-height! */
     object-fit: cover;
 }
 
