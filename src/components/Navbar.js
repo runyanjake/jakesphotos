@@ -2,8 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import logo from './static/navbar-logo.png';
+import github_dark from './static/github-dark.png';
+import github_light from './static/github-light.png';
 
 const Navbar = () => {
+    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const githubIcon = isDarkMode ? github_light : github_dark; //Icons are on dark background.
+
     return (
         <nav className="navbar">
             <div className="navbar-logo">
@@ -12,14 +17,11 @@ const Navbar = () => {
                 </Link>
             </div>
             <div className="navbar-title">
-                <h1>Photography Portfolio</h1>
+                <h1>Jake Runyan Photography</h1>
             </div>
             <div className="navbar-icons">
-                <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
-                    <img src="path/to/github-icon.png" alt="GitHub" className="icon" />
-                </a>
-                <a href="https://www.instagram.com/yourusername" target="_blank" rel="noopener noreferrer">
-                    <img src="path/to/instagram-icon.png" alt="Instagram" className="icon" />
+                <a href="https://github.com/runyanjake/jakesphotos" target="_blank" rel="noopener noreferrer">
+                    <img src={githubIcon} alt="GitHub" className="icon" />
                 </a>
             </div>
         </nav>
