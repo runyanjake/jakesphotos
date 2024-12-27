@@ -1,0 +1,20 @@
+version: '2.4'
+
+networks:
+  traefik:
+    external: true
+
+services:
+  image: jakesphotos:latest
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - traefik
+    labels:
+      - traefik.http.routers.photography.rule=Host(`jakesphotos.whitney.rip`)
+      - traefik.http.routers.photography.tls=true
+      - traefik.http.routers.photography.tls.certresolver=lets-encrypt
+      - traefik.http.services.photography.loadbalancer.server.port=80
+      - traefik.port=80
