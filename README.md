@@ -11,6 +11,7 @@ npx create-react-app portfolio
 npm install web-vitals
 npm install react-router-dom
 npm install masonry-layout
+npm install react-helmet
 ```
 3. Test changes/fixes with
 ```

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Masonry from 'masonry-layout';
 import images from '../data/Images'; // Import the image URLs
+import { Helmet } from 'react-helmet';
 import './Home.css'; // Ensure you have your CSS for styling
 
 // Shuffle function to randomize the array
@@ -45,6 +46,7 @@ const Home = () => {
 
     return (
         <div className="gallery" ref={masonryRef}>
+            <Helmet><title>Jake Runyan Photography</title></Helmet>
             {shuffledImages.map((image, index) => (
                 <img key={index} src={image} alt={`© Jake Runyan ${index + 1}`} className="gallery-photo" />
             ))}
