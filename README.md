@@ -18,3 +18,16 @@ npm install react-helmet
 npm install
 npm start
 ```
+
+## Running
+
+### Local development
+```
+npm start
+```
+
+### Docker
+```
+docker compose down && docker system prune -af && docker compose build && docker compose up -d && docker logs -f jakesphotos
+```
+

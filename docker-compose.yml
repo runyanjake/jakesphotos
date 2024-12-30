@@ -6,6 +6,7 @@ networks:
 
 services:
   portfolio:
+    container_name: jakesphotos
     build:
       context: .
       dockerfile: Dockerfile
