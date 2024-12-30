@@ -1,34 +1,59 @@
 .navbar {
     display: flex;
-    justify-content: space-between; /* Space between logo, title, and icons */
-    align-items: center; /* Center items vertically */
-    background-color: #0b0b0b; /* Background color of the navbar */
-    padding: 10px 20px; /* Padding for the navbar */
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0b0b0b;
+    padding: 10px 20px;
+    gap: 10px;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .navbar-logo .logo {
-    height: 50px; /* Set a height for the logo */
-    border-radius: 10px; /* Rounded corners for the logo */
+    height: 50px;
+    border-radius: 10px;
+}
+
+.navbar-links {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
 }
 
 .navbar-title h1 {
-    color: white; /* Text color */
-    font-family: 'Arial', sans-serif; /* Specify your desired font */
-    font-size: 24px; /* Font size for the title */
-    margin: 0; /* Remove default margin */
+    color: white;
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    margin: 0;
 }
 
 .navbar-icons {
-    display: flex; /* Use flexbox for icons */
-    gap: 15px; /* Space between icons */
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .navbar-icons .icon {
-    height: 30px; /* Set a height for the icons */
-    width: 30px; /* Set a width for the icons */
-    transition: transform 0.2s; /* Smooth transition for hover effect */
+    height: 30px;
+    width: 30px;
+    transition: transform 0.2s;
 }
 
 .navbar-icons .icon:hover {
-    transform: scale(1.1); /* Scale up the icon on hover */
+    transform: scale(1.1);
 }
