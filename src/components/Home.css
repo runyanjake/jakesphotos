@@ -6,11 +6,11 @@
 }
 
 .gallery-photo {
-    margin: 0.2vw;
+    margin: 0.66%;
     border-radius: 5px;
     display: block;
     height: auto;
-    max-width: 32vw; /* Do not mix with max-height! */
+    width: calc(32%);
     object-fit: cover;
 }
 
