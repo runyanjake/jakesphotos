@@ -41,7 +41,6 @@ const images = [
 	"https://images.whitney.rip/api/assets/0e88d871-fc8e-4ac3-a96a-920fce3cc546/thumbnail?size=preview&key=D35MzfeQJrcbf7FxRqtuTXw5CiKeNfAkNxsq4XAY6ivSt-Sa6otitmnUJQU-MAKuKPU&c=29jBcvMO6cEuqd08%2Bnf8BEmO4WE%3D",
 	"https://images.whitney.rip/api/assets/379a3b92-ff9b-4455-afe7-c2c6a8a270cd/thumbnail?size=preview&key=D35MzfeQJrcbf7FxRqtuTXw5CiKeNfAkNxsq4XAY6ivSt-Sa6otitmnUJQU-MAKuKPU&c=jsXHbNIeKLQY6Tcs%2FVh9bE5KlOE%3D",
 	"https://images.whitney.rip/api/assets/e03f66a6-a619-4624-a473-860026b3446a/thumbnail?size=preview&key=G4sdLdVrDhEpIFRcIJ9alvI6Re6_CmJGQ1VirR5Y3zjkA22Cr6vMVcviTYpTjq8PnuA&c=S6DnBWy90pmryXsnoQX9CQ3Y%2BBo%3D",
-	"",
 ];
 
 export default images;
