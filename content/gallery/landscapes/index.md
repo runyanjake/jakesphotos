@@ -1,0 +1,4 @@
+---
+template: gallery
+title: Landscapes
+---

@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Masonry from 'masonry-layout';
-import images from '../data/Images';
 import { Helmet } from 'react-helmet';
-import './Home.css';
-import Lightbox from './Lightbox';
+import Lightbox from '../components/Lightbox';
+import './GalleryTemplate.css';
 
 const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -13,12 +12,11 @@ const shuffleArray = (array) => {
     return array;
 };
 
-const Home = () => {
+const GalleryTemplate = ({ page }) => {
     const masonryRef = useRef(null);
     const [focusedImage, setFocusedImage] = useState(null);
 
-    // Compute once on mount; avoids a re-shuffle on every render
-    const shuffledImages = useMemo(() => shuffleArray([...images]), []);
+    const shuffledImages = useMemo(() => shuffleArray([...page.images]), [page.images]);
 
     useEffect(() => {
         const masonry = new Masonry(masonryRef.current, {
@@ -28,7 +26,6 @@ const Home = () => {
         });
 
         const relayout = () => masonry.layout();
-
         const imgElements = masonryRef.current.querySelectorAll('img');
         imgElements.forEach(img => img.addEventListener('load', relayout));
 
@@ -40,10 +37,17 @@ const Home = () => {
 
     return (
         <>
+            <Helmet><title>{page.frontmatter.title}</title></Helmet>
             <div className="gallery" ref={masonryRef}>
-                <Helmet><title>Jake Runyan Photography</title></Helmet>
                 {shuffledImages.map((image) => (
-                    <img key={image} src={image} alt="© Jake Runyan" className="gallery-photo" style={{ cursor: 'pointer' }} onClick={() => setFocusedImage(image)} />
+                    <img
+                        key={image}
+                        src={image}
+                        alt="© Jake Runyan"
+                        className="gallery-photo"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setFocusedImage(image)}
+                    />
                 ))}
             </div>
             {focusedImage && <Lightbox src={focusedImage} onClose={() => setFocusedImage(null)} />}
@@ -51,4 +55,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default GalleryTemplate;

@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     margin: 0 auto;
-    background-color: #333;
+    background-color: var(--color-bg);
 }
 
 .gallery-photo {
@@ -14,9 +14,8 @@
     object-fit: cover;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .gallery-photo {
-        width: calc(100% - 10px); /* Single column on smaller screens */
+        width: calc(100% - 10px);
     }
 }

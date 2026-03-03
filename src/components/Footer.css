@@ -2,8 +2,8 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    background-color: #0b0b0b;
-    color: white;
+    background-color: var(--color-bg-nav);
+    color: var(--color-text-nav);
     padding: 10px 20px;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .footer-links a {
-    color: gray;
+    color: var(--color-text-footer);
     text-decoration: none;
     margin: 5px 0;
     user-select: none;

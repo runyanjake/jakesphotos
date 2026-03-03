@@ -1,25 +1,33 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ContentProvider, usePages } from './framework/ContentProvider';
+import { getTemplate } from './framework/TemplateRegistry';
 import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Contact from './components/Contact';
-import About from './components/About';
 import Footer from './components/Footer';
+import './plugins/index';
 
-const App = () => {
+const PageRoutes = () => {
+    const pages = usePages();
     return (
-        <Router>
-            <>
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/about" element={<About />} />
-                </Routes>
-                <Footer />
-            </>
-        </Router>
+        <Routes>
+            {Object.entries(pages).map(([route, page]) => {
+                const Template = getTemplate(page.frontmatter.template);
+                return <Route key={route} path={route} element={<Template page={page} />} />;
+            })}
+        </Routes>
     );
 };
+
+const App = () => (
+    <Router>
+        <ContentProvider>
+            <>
+                <Navbar />
+                <PageRoutes />
+                <Footer />
+            </>
+        </ContentProvider>
+    </Router>
+);
 
 export default App;

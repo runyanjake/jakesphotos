@@ -3,19 +3,24 @@ import App from './App';
 
 // masonry-layout requires DOM layout APIs not available in jsdom
 jest.mock('masonry-layout', () => {
-    return jest.fn().mockImplementation(() => ({
-        layout: jest.fn(),
-        destroy: jest.fn(),
-    }));
+    const MockMasonry = function () {};
+    MockMasonry.prototype.layout = jest.fn();
+    MockMasonry.prototype.destroy = jest.fn();
+    return MockMasonry;
 });
 
 test('renders site title in navbar', () => {
     render(<App />);
-    expect(screen.getByText(/Jake Runyan Photography/i)).toBeInTheDocument();
+    // Use getAllByText since the title also appears in the homepage hero
+    const matches = screen.getAllByText(/Jake Runyan Photography/i);
+    expect(matches.length).toBeGreaterThan(0);
 });
 
 test('renders navigation links', () => {
     render(<App />);
-    expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
+    // Use getAllByRole to handle multiple matching links (navbar + footer)
+    const contactLinks = screen.getAllByRole('link', { name: /^contact$/i });
+    const aboutLinks = screen.getAllByRole('link', { name: /^about$/i });
+    expect(contactLinks.length).toBeGreaterThan(0);
+    expect(aboutLinks.length).toBeGreaterThan(0);
 });

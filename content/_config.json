@@ -1,0 +1,13 @@
+{
+  "siteTitle": "Jake Runyan Photography",
+  "footerCopyright": "Jake Runyan",
+  "nav": [
+    { "label": "Gallery", "path": "/gallery"  },
+    { "label": "Contact", "path": "/contact" },
+    { "label": "About",   "path": "/about"   }
+  ],
+  "social": [
+    { "label": "Instagram", "url": "https://www.instagram.com/jakerunyanphotography", "icon": "instagram" },
+    { "label": "GitHub",    "url": "https://github.com/runyanjake/jakesphotos",       "icon": "github"    }
+  ]
+}
