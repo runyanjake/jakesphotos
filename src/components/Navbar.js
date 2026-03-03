@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import logo from './static/navbar-logo.png';
@@ -7,8 +7,17 @@ import github_light from './static/github-light.png';
 import instagram_dark from './static/instagram-dark.png';
 import instagram_light from './static/instagram-light.png';
 
+const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
 const Navbar = () => {
-    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const [isDarkMode, setIsDarkMode] = useState(darkModeQuery.matches);
+
+    useEffect(() => {
+        const handler = (e) => setIsDarkMode(e.matches);
+        darkModeQuery.addEventListener('change', handler);
+        return () => darkModeQuery.removeEventListener('change', handler);
+    }, []);
+
     const githubIcon = isDarkMode ? github_light : github_dark;
     const instagramIcon = isDarkMode ? instagram_light : instagram_dark;
 

@@ -1,23 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Masonry from 'masonry-layout';
-import images from '../data/Images'; // Import the image URLs
+import images from '../data/Images';
 import { Helmet } from 'react-helmet';
-import './Home.css'; // Ensure you have your CSS for styling
+import './Home.css';
+import Lightbox from './Lightbox';
 
-// Shuffle function to randomize the array
 const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
 };
 
 const Home = () => {
     const masonryRef = useRef(null);
-    
-    // Shuffle images on component mount
-    const shuffledImages = shuffleArray([...images]); // Create a copy and shuffle
+    const [focusedImage, setFocusedImage] = useState(null);
+
+    // Compute once on mount; avoids a re-shuffle on every render
+    const shuffledImages = useMemo(() => shuffleArray([...images]), []);
 
     useEffect(() => {
         const masonry = new Masonry(masonryRef.current, {
@@ -26,31 +27,27 @@ const Home = () => {
             percentPosition: true,
         });
 
-        // Layout Masonry after images have loaded
-        const imagesLoaded = () => {
-            masonry.layout();
-        };
+        const relayout = () => masonry.layout();
 
-        // Add event listener for image load
         const imgElements = masonryRef.current.querySelectorAll('img');
-        imgElements.forEach(img => {
-            img.addEventListener('load', imagesLoaded);
-        });
+        imgElements.forEach(img => img.addEventListener('load', relayout));
 
         return () => {
-            imgElements.forEach(img => {
-                img.removeEventListener('load', imagesLoaded);
-            });
+            imgElements.forEach(img => img.removeEventListener('load', relayout));
+            masonry.destroy();
         };
     }, []);
 
     return (
-        <div className="gallery" ref={masonryRef}>
-            <Helmet><title>Jake Runyan Photography</title></Helmet>
-            {shuffledImages.map((image, index) => (
-                <img key={index} src={image} alt={`© Jake Runyan ${index + 1}`} className="gallery-photo" />
-            ))}
-        </div>
+        <>
+            <div className="gallery" ref={masonryRef}>
+                <Helmet><title>Jake Runyan Photography</title></Helmet>
+                {shuffledImages.map((image) => (
+                    <img key={image} src={image} alt="© Jake Runyan" className="gallery-photo" style={{ cursor: 'pointer' }} onClick={() => setFocusedImage(image)} />
+                ))}
+            </div>
+            {focusedImage && <Lightbox src={focusedImage} onClose={() => setFocusedImage(null)} />}
+        </>
     );
 };
 
