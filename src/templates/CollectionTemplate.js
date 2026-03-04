@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Masonry from 'masonry-layout';
 import { Helmet } from 'react-helmet';
 import Lightbox from '../components/Lightbox';
-import './GalleryTemplate.css';
+import './CollectionTemplate.css';
 
 const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -12,7 +12,7 @@ const shuffleArray = (array) => {
     return array;
 };
 
-const GalleryTemplate = ({ page }) => {
+const CollectionTemplate = ({ page }) => {
     const masonryRef = useRef(null);
     const [focusedImage, setFocusedImage] = useState(null);
 
@@ -55,4 +55,4 @@ const GalleryTemplate = ({ page }) => {
     );
 };
 
-export default GalleryTemplate;
+export default CollectionTemplate;

@@ -1,0 +1,106 @@
+.carousel {
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - var(--nav-height));
+    background-color: var(--color-bg);
+    user-select: none;
+}
+
+.carousel-track {
+    display: flex;
+    height: 100%;
+    /* transition managed inline to allow silent snaps */
+}
+
+.carousel-slide {
+    flex-shrink: 0;
+    width: calc(100vw / 3);
+    height: 100%;
+}
+
+.carousel-slide-inner {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 72px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.25);
+    border: none;
+    color: #fff;
+    font-size: 3rem;
+    line-height: 1;
+    padding: 16px 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background var(--transition-fast);
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.carousel-btn-prev {
+    left: 0;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.carousel-btn-next {
+    right: 0;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 28px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
+}
+
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    padding: 0;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.carousel-dot.active {
+    background: #fff;
+    transform: scale(1.35);
+}

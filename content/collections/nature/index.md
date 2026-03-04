@@ -1,0 +1,4 @@
+---
+template: collection
+title: Places
+---

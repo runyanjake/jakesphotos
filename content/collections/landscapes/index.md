@@ -1,4 +1,4 @@
 ---
-template: gallery
+template: collection
 title: Landscapes
 ---

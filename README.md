@@ -31,6 +31,98 @@ npm start
 docker compose down && docker system prune -af && docker compose build && docker compose up -d && docker logs -f jakesphotos
 ```
 
+## Page Templates
+
+Pages are defined in `content/` as `index.md` files with YAML frontmatter. The `template` frontmatter key selects which template renders the page. All templates support a `title` key.
+
+### `carousel`
+Full-height image slideshow that auto-advances and loops infinitely. Shows 3 slides at a time. Pauses on hover; prev/next buttons and dot indicators are provided. Slides are defined as `##` sections — link the heading to make the slide clickable.
+
+```markdown
+---
+template: carousel
+title: Home
+---
+
+## [Landscapes](/collection/landscapes)
+![](https://...)
+
+## Nature
+![](https://...)
+```
+
+### `collection`
+Masonry photo grid with a lightbox viewer. Images are loaded from a sibling `images.json` array of URLs. Order is randomised on each page load.
+
+```markdown
+---
+template: collection
+title: Landscapes
+---
+```
+
+`images.json` (same directory):
+```json
+["https://...", "https://..."]
+```
+
+### `menu`
+Grid of cards, each linking to another page. Useful for a collections index. Each `##` section becomes a card; link the heading for navigation and include an optional image and description.
+
+```markdown
+---
+template: menu
+title: Collections
+description: Browse my photo collections
+---
+
+## [Landscapes](/collection/landscapes)
+![](https://...)
+Mountains, coastal cliffs, and open skies.
+```
+
+### `default`
+Simple prose page. Renders markdown body content with an optional profile image.
+
+```markdown
+---
+template: default
+title: About Me
+profileImage: https://...
+---
+
+Markdown content here.
+```
+
+### `contact`
+Contact page. Renders optional `email` and `instagram` frontmatter as links, followed by any markdown body content.
+
+```markdown
+---
+template: contact
+title: Contact
+email: you@example.com
+instagram: yourhandle
+---
+
+Optional extra markdown here.
+```
+
+### `homepage`
+Alternating image/text sections. Each `##` section becomes a row with the image on one side and text on the other, alternating left/right.
+
+```markdown
+---
+template: homepage
+title: Welcome
+subtitle: Optional subtitle
+---
+
+## Section Heading
+![](https://...)
+Paragraph text here.
+```
+
 ## Notes on Generating Image Links
 Getting image links from Immich is not straightforward.  
 

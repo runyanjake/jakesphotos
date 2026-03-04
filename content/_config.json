@@ -1,8 +1,9 @@
 {
   "siteTitle": "Jake Runyan Photography",
   "footerCopyright": "Jake Runyan",
+  "collectionRoot": "collections",
   "nav": [
-    { "label": "Gallery", "path": "/gallery"  },
+    { "label": "Collections", "path": "/collections" },
     { "label": "Contact", "path": "/contact" },
     { "label": "About",   "path": "/about"   }
   ],

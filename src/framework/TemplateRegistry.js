@@ -1,11 +1,15 @@
-import GalleryTemplate from '../templates/GalleryTemplate';
+import CarouselTemplate from '../templates/CarouselTemplate';
+import CollectionTemplate from '../templates/CollectionTemplate';
+import CollectionIndexTemplate from '../templates/CollectionIndexTemplate';
 import DefaultTemplate from '../templates/DefaultTemplate';
 import ContactTemplate from '../templates/ContactTemplate';
 import HomepageTemplate from '../templates/HomepageTemplate';
 import MenuTemplate from '../templates/MenuTemplate';
 
 const registry = {
-    gallery: GalleryTemplate,
+    carousel: CarouselTemplate,
+    collection: CollectionTemplate,
+    'collection-index': CollectionIndexTemplate,
     default: DefaultTemplate,
     contact: ContactTemplate,
     homepage: HomepageTemplate,

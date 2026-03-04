@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f in \"C:/Users/runya/Documents/repositories/jakesphotos/content/collections\"/*/images.json)",
+      "Bash(do node -e \"JSON.parse\\(require\\(''fs''\\).readFileSync\\(''$f'',''utf8''\\)\\)\")",
+      "Bash(echo \"OK: $f\")",
+      "Bash(echo \"BAD: $f\")",
+      "Bash(done)",
+      "Bash(node -e \":*)"
+    ]
+  }
+}

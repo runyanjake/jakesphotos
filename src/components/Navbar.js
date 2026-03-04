@@ -27,7 +27,7 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <div className="navbar-logo">
+            <div className="navbar-left">
                 <Link to="/">
                     <img src={logo} alt="Logo" className="logo" />
                 </Link>
@@ -37,10 +37,10 @@ const Navbar = () => {
                     ))}
                 </div>
             </div>
-            <div className="navbar-title">
+            <div className="navbar-center">
                 <h1>{siteTitle}</h1>
             </div>
-            <div className="navbar-icons">
+            <div className="navbar-right">
                 {social.map(({ label, url, icon }) => {
                     const icons = ICON_MAP[icon];
                     const src = icons ? (isDarkMode ? icons.dark : icons.light) : null;
