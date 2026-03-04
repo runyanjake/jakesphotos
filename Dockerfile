@@ -22,6 +22,9 @@ FROM nginx:alpine
 # Copy the build files from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Use custom nginx config so client-side routes (e.g. /contact, /about) fall back to index.html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port 80
 EXPOSE 80
 

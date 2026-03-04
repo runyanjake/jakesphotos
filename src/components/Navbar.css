@@ -48,7 +48,10 @@
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    pointer-events: none;
+}
+
+.navbar-center a {
+    text-decoration: none;
 }
 
 .navbar-center h1 {
@@ -63,7 +66,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: calc(100vw - 160px);
-    pointer-events: auto;
 }
 
 .navbar-right {

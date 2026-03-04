@@ -56,7 +56,7 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-center">
-                <h1>{siteTitle}</h1>
+                <Link to="/"><h1>{siteTitle}</h1></Link>
             </div>
 
             <div className="navbar-right">
