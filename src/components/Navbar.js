@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteConfig } from '../framework/ContentProvider';
 import './Navbar.css';
@@ -18,12 +18,29 @@ const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 const Navbar = () => {
     const { siteTitle, nav, social } = useSiteConfig();
     const [isDarkMode, setIsDarkMode] = useState(darkModeQuery.matches);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         const handler = (e) => setIsDarkMode(e.matches);
         darkModeQuery.addEventListener('change', handler);
         return () => darkModeQuery.removeEventListener('change', handler);
     }, []);
+
+    useEffect(() => {
+        const handleResize = () => { if (window.innerWidth > 640) setMenuOpen(false); };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const SocialIcons = () => social.map(({ label, url, icon }) => {
+        const icons = ICON_MAP[icon];
+        const src = icons ? (isDarkMode ? icons.dark : icons.light) : null;
+        return (
+            <a key={icon} href={url} target="_blank" rel="noopener noreferrer">
+                {src && <img src={src} alt={label} className="icon" title={label} />}
+            </a>
+        );
+    });
 
     return (
         <nav className="navbar">
@@ -37,20 +54,35 @@ const Navbar = () => {
                     ))}
                 </div>
             </div>
+
             <div className="navbar-center">
                 <h1>{siteTitle}</h1>
             </div>
+
             <div className="navbar-right">
-                {social.map(({ label, url, icon }) => {
-                    const icons = ICON_MAP[icon];
-                    const src = icons ? (isDarkMode ? icons.dark : icons.light) : null;
-                    return (
-                        <a key={icon} href={url} target="_blank" rel="noopener noreferrer">
-                            {src && <img src={src} alt={label} className="icon" title={label} />}
-                        </a>
-                    );
-                })}
+                <div className="navbar-social">
+                    <SocialIcons />
+                </div>
+                <button
+                    className={`navbar-hamburger${menuOpen ? ' open' : ''}`}
+                    onClick={() => setMenuOpen(o => !o)}
+                    aria-label="Toggle menu"
+                    aria-expanded={menuOpen}
+                >
+                    <span /><span /><span />
+                </button>
             </div>
+
+            {menuOpen && (
+                <div className="navbar-mobile-menu">
+                    {nav.map(({ label, path }) => (
+                        <Link key={path} to={path} onClick={() => setMenuOpen(false)}>{label}</Link>
+                    ))}
+                    <div className="mobile-menu-icons">
+                        <SocialIcons />
+                    </div>
+                </div>
+            )}
         </nav>
     );
 };

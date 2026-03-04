@@ -23,7 +23,9 @@ const App = () => (
         <ContentProvider>
             <>
                 <Navbar />
-                <PageRoutes />
+                <main className="app-content">
+                    <PageRoutes />
+                </main>
                 <Footer />
             </>
         </ContentProvider>
