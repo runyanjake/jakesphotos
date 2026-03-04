@@ -5,6 +5,7 @@ import './CarouselTemplate.css';
 
 const VISIBLE = 3;
 const AUTOPLAY_DELAY = 4000;
+const MOBILE_BREAKPOINT = 600;
 
 function parseSlides(content) {
     const parts = content.split(/^## /m);
@@ -48,7 +49,17 @@ export default function CarouselTemplate({ page }) {
     const [trackIndex, setTrackIndex] = useState(VISIBLE);
     const [animated, setAnimated] = useState(true);
     const [paused, setPaused] = useState(false);
+    const [slideWidthPct, setSlideWidthPct] = useState(
+        window.innerWidth <= MOBILE_BREAKPOINT ? 100 : 100 / 3
+    );
     const timerRef = useRef(null);
+
+    useEffect(() => {
+        const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+        const handler = (e) => setSlideWidthPct(e.matches ? 100 : 100 / 3);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
 
     const advance = useCallback(() => setTrackIndex(i => i + 1), []);
 
@@ -105,7 +116,7 @@ export default function CarouselTemplate({ page }) {
                 <div
                     className="carousel-track"
                     style={{
-                        transform: `translateX(calc(-${trackIndex * 100 / 3}vw))`,
+                        transform: `translateX(calc(-${trackIndex * slideWidthPct}vw))`,
                         transition: animated ? 'transform 1.2s ease' : 'none',
                     }}
                     onTransitionEnd={handleTransitionEnd}
