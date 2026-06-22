@@ -2,10 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Only secret this project needs: the build-notification webhook.
         DISCORD_WEBHOOK = credentials('discord-pws-builds-channel-webhook')
 
-        // Deployment coordinates (match docker-compose.yml).
         COMPOSE_PROJECT = 'jakesphotos'
         TRAEFIK_NETWORK = 'traefik'
         APP_HOST        = 'jakesphotos.whitney.rip'
