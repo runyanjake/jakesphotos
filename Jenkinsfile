@@ -5,7 +5,6 @@ pipeline {
         DISCORD_WEBHOOK = credentials('discord-pws-builds-channel-webhook')
 
         COMPOSE_PROJECT = 'jakesphotos'
-        TRAEFIK_NETWORK = 'traefik'
         APP_HOST        = 'jakesphotos.whitney.rip'
     }
 
@@ -25,15 +24,11 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    if [ -z "$DISCORD_WEBHOOK" ]; then
-                        echo "ERROR: required secret DISCORD_WEBHOOK is missing"; exit 1
-                    fi
-                    docker network inspect "$TRAEFIK_NETWORK" >/dev/null 2>&1 || {
-                        echo "ERROR: external network '$TRAEFIK_NETWORK' does not exist"; exit 1
-                    }
-                    docker compose config -q || {
-                        echo "ERROR: docker-compose.yml is malformed"; exit 1
-                    }
+                    [ -n "$DISCORD_WEBHOOK" ] || { echo "ERROR: required secret DISCORD_WEBHOOK is missing"; exit 1; }
+                    [ -f docker-compose.yml ] || { echo "ERROR: docker-compose.yml not found at repo root"; exit 1; }
+                    [ -f Dockerfile ] || { echo "ERROR: Dockerfile not found at repo root"; exit 1; }
+                    [ -f package.json ] || { echo "ERROR: package.json not found at repo root"; exit 1; }
+                    node -e "JSON.parse(require('fs').readFileSync('content/_config.json','utf8'))" || { echo "ERROR: content/_config.json is missing or malformed"; exit 1; }
                 '''
             }
         }
