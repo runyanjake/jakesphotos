@@ -6,7 +6,10 @@
       "Bash(echo \"OK: $f\")",
       "Bash(echo \"BAD: $f\")",
       "Bash(done)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Read(//c/Users/runya/Documents/repositories/jakeswestcoast/src/**)",
+      "Bash(node scripts/build-content.js)",
+      "Bash(npx eslint *)"
     ]
   }
 }
