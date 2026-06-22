@@ -1,32 +1,28 @@
-# Use the official Node.js image as a build stage
-FROM node:20-alpine AS build
-
-# Set the working directory
+# Shared dependency layer, reused by the ci and build targets.
+FROM node:20-alpine AS deps
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+# Lint + content validation target, used by CI (docker build --target ci).
+FROM deps AS ci
 COPY . .
+RUN node scripts/build-content.js && npx eslint src --ignore-pattern 'src/generated/**' --max-warnings=0
 
-# Build the React application
+# Production build target: generates content then bundles the static site.
+FROM deps AS build
+COPY . .
 RUN npm run build
 
-# Use a lightweight web server to serve the build files
+# Serve the static bundle with nginx.
 FROM nginx:alpine
-
-# Copy the build files from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
-
-# Use custom nginx config so client-side routes (e.g. /contact, /about) fall back to index.html
+# Custom config so client-side routes fall back to index.html.
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
 EXPOSE 80
+# Liveness probe. Use 127.0.0.1 (not localhost): nginx listens IPv4-only and
+# busybox wget would resolve localhost to ::1 and get connection refused.
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q -O /dev/null http://127.0.0.1:80/ || exit 1
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

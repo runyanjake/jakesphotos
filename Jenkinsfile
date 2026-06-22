@@ -4,8 +4,8 @@ pipeline {
     environment {
         DISCORD_WEBHOOK = credentials('discord-pws-builds-channel-webhook')
 
-        COMPOSE_PROJECT = 'jakesphotos'
-        APP_HOST        = 'jakesphotos.whitney.rip'
+        COMPOSE_SERVICE = 'portfolio'
+        CONTAINER_NAME  = 'jakesphotos'
     }
 
     options {
@@ -36,59 +36,51 @@ pipeline {
 
         stage('Lint & Type-check') {
             steps {
-                // Run checks in a clean, throwaway container so nothing leaks from the agent.
-                sh '''
-                    set -e
-                    docker run --rm -v "$PWD":/app -w /app node:20-alpine sh -c '
-                        set -e
-                        npm ci
-                        node scripts/build-content.js
-                        npx eslint src --max-warnings=0
-                    ' || { echo "ERROR: static quality checks failed"; exit 1; }
-                '''
+                // Static checks run inside the image's ci target; nothing touches the agent.
+                sh 'docker build --target ci -t ${CONTAINER_NAME}-ci:${BUILD_NUMBER} .'
             }
         }
 
         stage('Teardown') {
             steps {
                 sh '''
-                    set -e
-                    docker compose down --remove-orphans || {
-                        echo "ERROR: failed to tear down previous deployment"; exit 1
-                    }
+                    set -eu
+                    docker compose down --remove-orphans || true
+                    # container_name is fixed, so a stale container can survive "down"
+                    # and then block "up" with a name conflict; reap it explicitly.
+                    docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
                 '''
             }
         }
 
         stage('Build & Deploy') {
             steps {
-                // The React build consumes only static content/, so there are no build-time secrets to inject.
-                sh '''
-                    set -e
-                    docker compose build || { echo "ERROR: build failed"; exit 1; }
-                    docker compose up -d || { echo "ERROR: deploy failed"; exit 1; }
-                '''
+                // No build-time secrets: the React build consumes only static content/.
+                sh 'docker compose up -d --build'
             }
         }
 
         stage('Health Check') {
             steps {
                 sh '''
-                    set -e
-                    echo "Waiting for $COMPOSE_PROJECT to report live..."
-                    for i in $(seq 1 30); do
-                        running=$(docker inspect -f '{{.State.Running}}' "$COMPOSE_PROJECT" 2>/dev/null || echo false)
-                        if [ "$running" != "true" ]; then
-                            echo "ERROR: container $COMPOSE_PROJECT is not running"
-                            docker logs --tail 50 "$COMPOSE_PROJECT" || true
-                            exit 1
-                        fi
-                        if docker exec "$COMPOSE_PROJECT" wget -q -O /dev/null http://localhost:80/; then
-                            echo "$COMPOSE_PROJECT is live."; exit 0
-                        fi
+                    set -eu
+                    cid="$(docker compose ps -q "$COMPOSE_SERVICE")"
+                    [ -n "$cid" ] || { echo "ERROR: $COMPOSE_SERVICE container not found" >&2; exit 1; }
+
+                    # Wait for the image's HEALTHCHECK to report healthy, failing fast on terminal states.
+                    deadline=$(( $(date +%s) + 90 ))
+                    while :; do
+                        status="$(docker inspect -f '{{.State.Status}}' "$cid")"
+                        health="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$cid")"
+                        [ "$status" = "running" ] && [ "$health" = "healthy" ] && break
+                        [ "$health" = "unhealthy" ] && { echo "ERROR: $COMPOSE_SERVICE reported unhealthy" >&2; exit 1; }
+                        case "$status" in
+                            exited|dead) echo "ERROR: $COMPOSE_SERVICE container $status before becoming healthy" >&2; exit 1 ;;
+                        esac
+                        [ "$(date +%s)" -ge "$deadline" ] && { echo "ERROR: timed out waiting for healthy (status=$status, health=$health)" >&2; exit 1; }
                         sleep 2
                     done
-                    echo "ERROR: $COMPOSE_PROJECT did not become healthy in time"; exit 1
+                    echo "$COMPOSE_SERVICE healthy"
                 '''
             }
         }
@@ -96,15 +88,14 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 sh '''
-                    set -e
-                    echo "Smoke testing https://$APP_HOST/ ..."
-                    body=$(curl -fsS --retry 5 --retry-delay 3 "https://$APP_HOST/") || {
-                        echo "ERROR: request to https://$APP_HOST/ failed"; exit 1
-                    }
-                    echo "$body" | grep -q 'id="root"' || {
-                        echo "ERROR: response did not contain expected app markup"; exit 1
-                    }
-                    echo "Smoke test passed."
+                    set -eu
+                    cid="$(docker compose ps -q "$COMPOSE_SERVICE")"
+                    [ -n "$cid" ] || { echo "ERROR: $COMPOSE_SERVICE container not found" >&2; exit 1; }
+
+                    # Real request from inside the container: GET / must serve the SPA shell.
+                    body="$(docker exec "$cid" wget -q -O - http://127.0.0.1:80/)" || { echo "ERROR: GET / did not return a successful response" >&2; exit 1; }
+                    echo "$body" | grep -q 'id="root"' || { echo "ERROR: GET / response missing expected app markup" >&2; exit 1; }
+                    echo "smoke test passed"
                 '''
             }
         }
