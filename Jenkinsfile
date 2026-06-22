@@ -11,6 +11,7 @@ pipeline {
     options {
         timestamps()
         disableConcurrentBuilds()
+        timeout(time: 30, unit: 'MINUTES')
     }
 
     stages {
@@ -23,12 +24,12 @@ pipeline {
         stage('Preflight') {
             steps {
                 sh '''
-                    set -e
-                    [ -n "$DISCORD_WEBHOOK" ] || { echo "ERROR: required secret DISCORD_WEBHOOK is missing"; exit 1; }
-                    [ -f docker-compose.yml ] || { echo "ERROR: docker-compose.yml not found at repo root"; exit 1; }
-                    [ -f Dockerfile ] || { echo "ERROR: Dockerfile not found at repo root"; exit 1; }
-                    [ -f package.json ] || { echo "ERROR: package.json not found at repo root"; exit 1; }
-                    node -e "JSON.parse(require('fs').readFileSync('content/_config.json','utf8'))" || { echo "ERROR: content/_config.json is missing or malformed"; exit 1; }
+                    set -eu
+                    : "${DISCORD_WEBHOOK:?required credential discord-pws-builds-channel-webhook is missing}"
+                    for f in Dockerfile package.json docker-compose.yml content/_config.json; do
+                        [ -f "$f" ] || { echo "ERROR: required file '$f' not found at repo root" >&2; exit 1; }
+                    done
+                    docker compose config -q
                 '''
             }
         }
