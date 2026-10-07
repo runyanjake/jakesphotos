@@ -5,6 +5,7 @@ networks:
 services:
   portfolio:
     container_name: jakesphotos
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
